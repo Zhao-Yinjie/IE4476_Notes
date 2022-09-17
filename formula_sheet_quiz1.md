@@ -57,7 +57,7 @@ $$
   $$
   \begin{bmatrix}X\\Y\\Z\end{bmatrix}=\begin{bmatrix}0.4124 &0.3576 &0.1804\\0.2127 &0.7152 &0.0722\\0.0193 &0.1192 &0.9502\end{bmatrix}  \begin{bmatrix}R_{709}\\G_{709}\\B_{709}\end{bmatrix}; \ \ 
   
-  \begin{bmatrix}R_{709}\\G_{709}\\B_{709}\end{bmatrix}=\begin{bmatrix}3.2405 &1.5372 &0.4985\\-0.9692& 1.8760& 0.0416\\0.0556& 0.2040 &1.0573\end{bmatrix}  \begin{bmatrix}X\\Y\\Z\end{bmatrix} 
+  \begin{bmatrix}R_{709}\\G_{709}\\B_{709}\end{bmatrix}=\begin{bmatrix}3.2405 &-1.5372 &-0.4985\\-0.9692& 1.8760& 0.0416\\0.0556& -0.2040 &1.0573\end{bmatrix}  \begin{bmatrix}X\\Y\\Z\end{bmatrix}
   $$
 
 - XYZ - Lab Conversion
@@ -65,34 +65,34 @@ $$
 $$
 L^*=116f(\frac{Y}{Y_n})-16, \\ 
 a^*=500(f(\frac{X}{X_n})-f(\frac{Y}{Y_n}), \\ 
-b^*=500(f(\frac{Y}{Y_n})-f(\frac{Z}{Z_n}), \\
+b^*=200(f(\frac{Y}{Y_n})-f(\frac{Z}{Z_n}), \\
 
 where \ \ f(u) = 
 \begin{cases}
-116u^{\frac{1}{3}} \ \ \ if u > 0.008856 \\
+u^{\frac{1}{3}} \ \ \ if u > 0.008856 \\
 7.787u+\frac{16}{116} \ \ \ otherwise
 \end{cases} \\
 
-Chroma: \ C^*_{ab} = \sqrt{(a^*)^2+(b^*)^2}; \\ Hue: \ h_{ab} = tan^{-1}(\frac{b^*}{a^*}); \\  Color \ difference: \ \Delta E = \sqrt{(L^*)^2+(a^*)^2+(b^*)^2}
+Chroma: \ C^*_{ab} = \sqrt{(a^*)^2+(b^*)^2}; \\ Hue: \ h_{ab} = tan^{-1}(\frac{b^*}{a^*}); \\  Color \ difference: \ \Delta E = \sqrt{(\Delta L^*)^2+(\Delta a^*)^2+(\Delta b^*)^2}
 $$
 
 <h3>Lecture 3</h3>
 
 * Definition of image as 2D sequence
   $$
-  f(x,y) = \sum^{\infin}_{m=-\infin} \sum^{\infin}_{n=-\infin}f(x,y)\delta(x-m,y-n)
+  f(x,y) = \sum^{\infin}_{m=-\infin} \sum^{\infin}_{n=-\infin}f(m,n)\delta(x-m,y-n)
   $$
 
 * 2D LSI (Linear Shift-Invariant) System
   $$
-  g(x,y) = T[f(x,y)] = \sum^{\infin}_{m=-\infin} \sum^{\infin}_{n=-\infin}f(x,y) \ T[\delta(x-m,y-n)] \\
-  =\sum^{\infin}_{m=-\infin} \sum^{\infin}_{n=-\infin}f(x,y) h(x-m,y-n) =f(x,y)*h(x,y)
+  g(x,y) = T[f(x,y)] = \sum^{\infin}_{m=-\infin} \sum^{\infin}_{n=-\infin}f(m,n) \ T[\delta(x-m,y-n)] \\
+  =\sum^{\infin}_{m=-\infin} \sum^{\infin}_{n=-\infin}f(m,n) h(x-m,y-n) =f(x,y)*h(x,y)
   $$
 
 * Fourier Transform
   $$
   F(u,v)=\int_{-\infin}^{\infin} f(x,y) \ e^{-j2\pi(ux+vy)} \ dxdy \\
-  f(x,y)=\int_{-\infin}^{\infin} f(x,y) \ e^{j2\pi(ux+vy)} \ dxdy \\\\
+  f(x,y)=\int_{-\infin}^{\infin} f(u,v) \ e^{j2\pi(ux+vy)} \ dxdy \\\\
   Fourier \ spectrum: |F(u,v)|=\sqrt{R^2(u,v)+I^2(u,v)} \\
   Phase \ angle:\phi = tan^{-1}[\frac{I(u,v)}{R(u,v)}] \\
   Power \ spectrum = |F(u,v)|^2 = R^2(u,v)+I^2(u,v), \ \ \ where F(u,v) = R(u,v)+jI(u,v)
@@ -101,7 +101,7 @@ $$
 * Discrete Fourier Transform
   $$
   F(u,v)=\frac{1}{MN}\sum_{m=0}^{\infin}\sum_{n=0}^{\infin}f(x,y)e^{-j2\pi(\frac{ux}{M}+\frac{vy}{N})} \\
-  F(x,y)=\sum_{m=0}^{\infin}\sum_{n=0}^{\infin}f(x,y)e^{j2\pi(\frac{ux}{M}+\frac{vy}{N})}
+  f(x,y)=\sum_{m=0}^{\infin}\sum_{n=0}^{\infin}F(u,v)e^{j2\pi(\frac{ux}{M}+\frac{vy}{N})}
   $$
 
 * Properties of 2D FT
@@ -115,8 +115,8 @@ $$
 * DCT (Discrete Cosine Transform)
   $$
   F(u,v) = \frac{2}{N}C(u)C(v)\sum_{x=0}^{N-1}\sum_{y=0}^{N-1}f(x,y)cos(\frac{(2x+1)u\pi}{2N})cos(\frac{(2y+1)v\pi}{2N}),\\ 
-  where \ \ C(u), C(v)= \begin{cases}\frac{1}{\sqrt{2}} \ for \ u,v=0\\1 \ for \ u,v=1,...,N-1\end{cases}\\
-  f(x,y) = \frac{2}{N}\sum_{x=0}^{N-1}\sum_{y=0}^{N-1}F(u,v)cos(\frac{(2x+1)u\pi}{2N})cos(\frac{(2y+1)v\pi}{2N})
+  f(x,y) = \frac{2}{N}\sum_{x=0}^{N-1}\sum_{y=0}^{N-1}C(u)C(v)F(u,v)cos(\frac{(2x+1)u\pi}{2N})cos(\frac{(2y+1)v\pi}{2N}), \\
+  where \ \ C(u), C(v)= \begin{cases}\frac{1}{\sqrt{2}} \ for \ u,v=0\\1 \ for \ u,v=1,...,N-1\end{cases}
   $$
 
 <h3>Lecture4
@@ -133,7 +133,7 @@ $$
 
 * Sampling Theorem - *Nyquist Rate*
   $$
-  f_{xs}=\frac{1}{\Delta x}\leq2U_0 \ \ f_{ys}=\frac{1}{\Delta y}\leq2V_0 \\
+  f_{xs}=\frac{1}{\Delta x}>2U_0 \ \ f_{ys}=\frac{1}{\Delta y}>2V_0 \\
   $$
   Reconstructing original image from sampled image
   $$
@@ -147,10 +147,11 @@ $$
   Lloyd-Max Quantizer - based on *probability density function*
 
 $$
-Quantization \ error: \ \varepsilon=E[(f-\bar{f})^2]=\int_{-\infin}^{\infin}(f-\bar{f})^2 P(f) df \\
+Quantization \ error: \ \varepsilon=E[(f-\bar{f})^2]=\int_{t_1}^{t_{L+1}}(f-Q(f))^2 P(f) df \\
+=\sum_{k=1}^{L}\int_{t_k}^{t_{k+1}}(f-Q(f))^2 df \\
 Let \ \frac{d\varepsilon}{df}=0, \ we \ get: \\
 t_k = \frac{r_k+r_{k-1}}{2}, \ for \ k=2,...,L \\
-r_k = \frac{\int_{-\infin}^{\infin}f P(f) df}{\int_{-\infin}^{\infin} P(f) df}, \ for \ k=1,...,L
+r_k = \frac{\int_{t_k}^{t_{k+1}}f P_f(f) df}{\int_{t_k}^{t_{k+1}} P_f(f) df}, \ for \ k=1,...,L
 $$
 
 ​		If p(f) is uniform (namely, ):
